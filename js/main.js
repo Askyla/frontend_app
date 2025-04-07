@@ -410,6 +410,9 @@ function handleLogin() {
     }), 
     contentType: "application/x-www-form-urlencoded; charset=UTF-8",
     processData: true,
+    headers: {
+        'Origin': 'https://askyla.com' // This sets the origin header
+    },
     success: function (response) {
       alert("Login successful!");
       const accessToken = response.access_token;
