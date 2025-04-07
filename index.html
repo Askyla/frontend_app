@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ΔSKYLA - Your AI Companion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+          /> -->
+    <link href="https://fonts.google.com/share?selection.family=Nunito:ital,wght@0,200..1000;1,200..1000"
+        rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet" />
+    <style>
+        body {
+            font-family: "Nunito", sans-serif;
+            background-color: #f8f4e6 !important;
+        }
+
+        .major-mono-display-regular {
+            font-family: "Major Mono Display", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .open-sans-medium {
+            font-family: "Open Sans", serif;
+            font-optical-sizing: auto;
+            font-weight: normal;
+            font-style: normal;
+            font-variation-settings: "wdth" 100;
+        }
+
+        .open-sans-bold {
+            font-family: "Open Sans", serif !important;
+            /* override with !important */
+            font-optical-sizing: auto;
+            font-weight: bold;
+            font-style: normal;
+            font-variation-settings: "wdth" 100;
+        }
+
+        .superpower-card {
+            border: 2px solid black;
+            border-radius: 20px;
+            background-color: rgb(248, 244, 230);
+            padding: 24px;
+            position: relative;
+        }
+
+        .number-badge {
+            width: 32px;
+            height: 32px;
+            border: 2px solid black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            position: absolute;
+            top: -16px;
+            left: -16px;
+            font-weight: 600;
+        }
+
+        .chat-bubble {
+            border-radius: 20px;
+            padding: 16px;
+            max-width: 80%;
+        }
+
+        .user-bubble {
+            background-color: #f7cb46;
+            align-self: flex-start;
+            border: 1px solid black;
+        }
+
+        .ai-bubble {
+            background-color: white;
+            align-self: flex-end;
+            border: 0.5px solid black;
+        }
+
+        .faq-item {
+            border: 2px solid black;
+            border-radius: 16px;
+            padding: 20px;
+            background-color: #fdf6ec;
+            transition: all 0.3s ease;
+        }
+
+        .faq-toggle {
+            width: 36px;
+            height: 36px;
+            background-color: #007880;
+            border-radius: 8px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        #contact .flex {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        @media (min-width: 1024px) {
+            #contact .flex {
+                flex-direction: row;
+            }
+
+            #contact .lg\:w-1\/2 {
+                width: 50%;
+            }
+        }
+
+        .auth-container {
+            perspective: 1000px;
+        }
+
+        .auth-flipper {
+            transition: 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .auth-flipper.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .login-form,
+        .signup-form {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .signup-form {
+            transform: rotateY(180deg);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "custom-cream": "#FDF6EC",
+                        "custom-yellow": "#F7CB46",
+                        "custom-orange": "#FFB800",
+                        "custom-teal": "#2A9D8F",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        @import url("https://fonts.google.com/share?selection.family=Nunito:ital,wght@0,200..1000;1,200..1000");
+
+        body {
+            font-family: "Nunito", sans-serif;
+        }
+
+        .superpower-card {
+            border: 2px solid black;
+            border-radius: 20px;
+            background-color: rgb(248, 244, 230);
+            padding: 24px;
+            position: relative;
+        }
+
+        .number-badge {
+            width: 32px;
+            height: 32px;
+            border: 2px solid black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            position: absolute;
+            top: -16px;
+            left: -16px;
+            font-weight: 600;
+        }
+
+        .chat-bubble {
+            border-radius: 20px;
+            padding: 16px;
+            max-width: 80%;
+        }
+
+        .user-bubble {
+            background-color: #f7cb46;
+            align-self: flex-start;
+            border: 1px solid black;
+            border-radius: 0px 15px 15px 5px;
+            /* Remove left side rounding */
+            padding: 10px 15px;
+            position: relative;
+            max-width: 70%;
+        }
+
+        .ai-bubble {
+            background-color: white;
+            align-self: flex-end;
+            border: 1px solid black;
+            border-radius: 15px 15px 5px 15px;
+            /* Keep the right side as it is */
+            padding: 10px 15px;
+            position: relative;
+            max-width: 70%;
+        }
+
+        /* Ensure the container aligns to the left edge */
+        .p-6 {
+            border-radius: 0px 20px 20px 0px !important;
+            /* Remove left rounding */
+        }
+
+        .faq-item {
+            border: 2px solid black;
+            border-radius: 16px;
+            padding: 20px;
+            background-color: #fdf6ec;
+            transition: all 0.3s ease;
+        }
+
+        .faq-toggle {
+            width: 36px;
+            height: 36px;
+            background-color: #2a9d8f;
+            border-radius: 8px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        #contact .flex {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        @media (min-width: 1024px) {
+            #contact .flex {
+                flex-direction: row;
+            }
+        }
+
+        #contact .lg\\:w-1\/2 {
+            width: 100%;
+        }
+
+        @media (min-width: 1024px) {
+            #contact .lg\:w-1\/2 {
+                width: 50%;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Rounded:wght@800;900&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet" />
+</head>
+
+<body class="bg-custom-cream">
+    <header class="container mx-auto px-4 py-4">
+        <nav class="flex items-center justify-between">
+            <a href="#" class="text-xl font-bold">ΔSKYLA</a>
+            <div class="flex items-center gap-8">
+                <div class="hidden md:flex gap-6">
+                    <a href="#features" class="text-sm font-medium hover:text-custom-teal">Features</a>
+                    <a href="#faq" class="text-sm font-medium hover:text-custom-teal">FAQ</a>
+                    <a href="#contact" class="text-sm font-medium hover:text-custom-teal">Contact</a>
+                </div>
+                <button id="loginBtn" style="display: none"
+                    class="bg-custom-yellow text-black hover:bg-custom-yellow/90 px-6 py-2 rounded-full font-medium border-2 border-black">
+                    Login
+                </button>
+                <a id="notLoggedInButton" href="chat.html"
+                    class="bg-custom-yellow text-black hover:bg-custom-yellow/90 px-6 py-2 rounded-full font-medium border-2 border-black"
+                    style="display: none">Chat</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="container mx-auto px-4 pt-[16] pb-20 md:pt-20">
+            <div class="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
+                <div class="space-y-8">
+                    <h1 class="font-extrabold text-[80px] leading-[90px] tracking-tight text-custom-orange text-left"
+                        style="
+                    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+                      1px 1px 0 #000;
+                    font-weight: 900;
+                    color: #F7CB46;
+                  ">
+                        Meet Your New Best Friend - Anytime, Anywhere
+                    </h1>
+
+
+                    <p class="font-open-sans font-normal text-[18px] leading-[22px] text-gray-600 max-w-[600px]">
+                        Join the fun and make every conversation a delightful experience.
+                        Let's get you started on your journey to better, meaningful
+                        connections.
+                    </p>
+                    <button id="talk_buddy" style="display: none"
+                        class="bg-custom-yellow text-black hover:bg-custom-yellow/90 px-6 py-2 text-lg rounded-full font-bold border border-black transition-transform transform hover:-translate-y-0.5 flex items-center justify-center border-2 border-black border-t border-l border-[#000] border-[4px]">
+                        Talk to your Buddy
+                    </button>
+                    <a id="talk_buddy_chat" style="display: none; width: fit-content" href="chat.html"
+                        class="bg-custom-yellow text-black hover:bg-custom-yellow/90 px-6 py-2 text-lg rounded-full font-bold border border-black transition-transform transform hover:-translate-y-0.5 flex items-center justify-center border-2 border-black border-t border-l border-[#000] border-[4px]">
+                        Talk to your Buddy
+                    </a>
+                </div>
+                <div class="relative h-[400px] md:h-[500px] lg:h-[600px]">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Frame%20154-D6DV8s1yPw29v7WFwdjEArlhYUXFIz.png"
+                        alt="Friendly mascot character on a skateboard"
+                        class="absolute inset-0 w-full h-full object-contain" />
+                </div>
+            </div>
+        </section>
+
+        <div class="relative min-h-screen overflow-hidden" style="
+              background-image: url('bg.png');
+              background-size: cover;
+              background-repeat: no-repeat;
+              background-position: center;
+            ">
+            <!-- Background Blobs -->
+            <div class="background-blob w-[400px] h-[400px] top-[-100px] left-[-100px]"></div>
+            <div class="background-blob w-[300px] h-[300px] bottom-[-50px] right-[-50px]"></div>
+            <div class="background-blob w-[200px] h-[200px] top-[40%] left-[30%]"></div>
+
+            <!-- Main Content -->
+            <div class="container mx-auto px-4 py-12 relative">
+                <!-- Title -->
+                <h1 class="text-center mb-16 relative z-10">
+                    <span class="block text-6xl md:text-7xl text-black mb-2 open-sans-bold">Askyla's</span>
+                    <!-- <span class="block text-6xl md:text-7xl font-family-'Open Sans' !important font-bold title-stroke" >Superpowers</span> -->
+                    <span class="block text-6xl md:text-7xl open-sans-bold text-white" style="
+                  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+                    1px 1px 0 #000;
+                  font-weight: 900;
+                  font-size: 68px;
+                ">Superpowers</span>
+                </h1>
+
+                <!-- Feature Cards and Mascot Container -->
+                <div class="relative max-w-5xl mx-auto">
+                    <!-- Mascot Image -->
+                    <div
+                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] md:w-[460px] z-11 mascot">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/5%20(1)-I8FL3GOVVR9z4HF2q3fIda4lJLl7bN.png"
+                            alt="Askyla Mascot" class="w-full h-auto" />
+                    </div>
+
+                    <!-- Feature Cards Grid -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-6 relative z-2">
+                        <!-- Left Column -->
+                        <div class="space-y-6 flex flex-col items-center">
+                            <div class="feature-card right-shadow-dark w-11/12 md:w-4/5">
+                                <h3 class="font-600 text-lg card-font" style="font-weight:unset"> Unique <br>
+                                    Best Friend </h3>
+                            </div>
+                            <div class="feature-card mt-12 md:mt-24 right-shadow-dark w-11/12 md:w-4/5 ml-12 md:ml-24">
+                                <h3 class="font-600 text-lg text-center card-font"> Realistic<br>
+                                    Friendship </h3>
+                            </div>
+                            <div class="feature-card mt-12 md:mt-24 right-shadow-dark w-11/12 md:w-4/5">
+                                <h3 class="font-600 text-lg card-font"> Emotionally <br>
+                                    Responsive </h3>
+                            </div>
+                        </div>
+
+                        <!-- Center Column (Empty for Mascot) -->
+                        <div class="hidden md:block"></div>
+
+                        <!-- Right Column -->
+                        <div class="space-y-6 flex flex-col items-center">
+                            <div class="feature-card left-shadow-dark w-11/12 md:w-4/5 ml-12 md:ml-24">
+                                <h3 class="font-600 text-lg card-font" style="font-weight:unset"> Remembers <br>
+                                    Everything </h3>
+                            </div>
+                            <div class="feature-card mt-12 md:mt-24 left-shadow-dark w-11/12 md:w-4/5">
+                                <h3 class="font-600 text-lg text-center card-font"> Confidential, <br>
+                                    Won't Judge </h3>
+                            </div>
+                            <div class="feature-card mt-12 md:mt-24 left-shadow-dark w-11/12 md:w-4/5 ml-12 md:ml-24">
+                                <h3 class="font-600 text-lg card-font"> Always <br>
+                                    Available </h3>
+                            </div>
+                        </div>
+
+                        <style>
+                            .right-shadow-dark {
+                                box-shadow: 5px 5px 0px #000;
+                                /* Solid dark shadow */
+                            }
+
+                            .left-shadow-dark {
+                                box-shadow: -5px 5px 0px #000;
+                                /* Solid dark shadow */
+                            }
+
+                            .background-blob {
+                                position: absolute;
+                                background: rgba(255, 216, 77, 0.3);
+                                border-radius: 50%;
+                                filter: blur(60px);
+                                z-index: 1;
+                            }
+
+                            .title-stroke {
+                                -webkit-text-stroke: 2px black;
+                                color: transparent;
+                            }
+
+                            .feature-card {
+                                background: white;
+                                border: 2px solid black;
+                                border-radius: 16px;
+                                padding: 20px;
+                                position: relative;
+                                z-index: 2;
+                                transition: transform 0.3s ease;
+                            }
+
+                            .feature-card:hover {
+                                transform: translateY(-5px);
+                            }
+
+                            .card-font {
+                                font-family: 'Nunito Rounded', sans-serif;
+                                text-align: center;
+                                font-size: 18px;
+                                line-height: 1.2;
+                            }
+
+                            .mascot {
+                                animation: float 3s ease-in-out infinite;
+                            }
+
+                            @keyframes float {
+
+                                0%,
+                                100% {
+                                    transform: translate(-50%, -50%);
+                                }
+
+                                50% {
+                                    transform: translate(-50%, -55%);
+                                }
+                            }
+                        </style>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <script>
+            // Add any interactivity if needed
+            document.addEventListener("DOMContentLoaded", function () {
+                // Initialize any JavaScript functionality
+            });
+        </script>
+
+        <section class="container mx-auto px-4 py-20 " style="background-color: #F8F4E6;">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2">
+                    <div class="p-6 rounded-2xl flex flex-col gap-4"
+                        style="background-color: #D9D9D9; border: 1px solid black;">
+                        <div class="flex gap-4">
+                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/placeholder.svg"
+                                width="40" height="40" alt="User" class="rounded-full" />
+                            <div class="chat-bubble user-bubble">
+                                <p>
+                                    Arrey yaar, remember last time jab tu aise feel kar raha
+                                    tha? Tujhe kaise boost mila tha uss waqt?
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 justify-end">
+                            <div class="chat-bubble ai-bubble">
+                                <p>
+                                    Oh, haan yaar, ab yaad aaya. Tu ne suggest kiya tha ki main
+                                    apne favorite songs sunoon aur kuch time apne hobbies mein
+                                    invest karoon.
+                                </p>
+                            </div>
+                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Frame%20154-D6DV8s1yPw29v7WFwdjEArlhYUXFIz.png"
+                                width="40" height="40" alt="AI Buddy" class="rounded-full" />
+                        </div>
+                        <div class="flex gap-4">
+                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/placeholder.svg"
+                                width="40" height="40" alt="User" class="rounded-full" />
+                            <div class="chat-bubble user-bubble">
+                                <p>
+                                    Arrey yaar, remember last time jab tu aise feel kar raha
+                                    tha? Tujhe kaise boost mila tha uss waqt?
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <h2 class="text-4xl font-bold mb-4">Let's Start A Conversation!</h2>
+                    <p class="mb-6 text-gray-600">
+                        Your journey to meaningful conversations begins here. Open up,
+                        share, and let your AI buddy be there for every thought and
+                        feeling.
+                    </p>
+                    <button id="get_started" style="display: none"
+                        class="bg-custom-yellow px-8 py-3 rounded-full font-bold border-2 border-black transform transition-transform hover:-translate-y-0.5 border-2 border-black border-t border-l border-[#000] border-[4px]">
+                        Get Started
+                    </button>
+                    <a id="get_started_chat" style="display: none; width: fit-content" href="chat.html"
+                        class="bg-custom-yellow px-8 py-3 rounded-full font-bold border-2 border-black transform transition-transform hover:-translate-y-0.5 border-2 border-black border-t border-l border-[#000] border-[4px]">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="container mx-auto px-4 py-20 bg-white">
+
+            <h2 class="text-4xl font-bold mb-12">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <div class="faq-item">
+                    <button class="flex justify-between items-center w-full">
+                        <span class="font-bold text-lg">What is eBuddy and how does it work?</span>
+                        <div class="faq-toggle">+</div>
+                    </button>
+                    <p class="mt-4 hidden">
+                        eBuddy is your AI companion that learns and grows with you,
+                        offering genuine friendship and support through natural
+                        conversations.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <button class="flex justify-between items-center w-full">
+                        <span class="font-bold text-lg">Is my data safe and confidential with eBuddy?</span>
+                        <div class="faq-toggle">+</div>
+                    </button>
+                    <p class="mt-4 hidden">
+                        We prioritize your privacy and security. All conversations are
+                        encrypted and stored securely. Your data is never shared with
+                        third parties, ensuring a safe and non-judgmental space for you to
+                        express yourself.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <button class="flex justify-between items-center w-full">
+                        <span class="font-bold text-lg">Can I customize my AI buddy's appearance and personality?</span>
+                        <div class="faq-toggle">+</div>
+                    </button>
+                    <p class="mt-4 hidden">
+                        Yes, you can personalize various aspects of your buddy to match
+                        your preferences.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <button class="flex justify-between items-center w-full">
+                        <span class="font-bold text-lg">What platforms is eBuddy available on?</span>
+                        <div class="faq-toggle">+</div>
+                    </button>
+                    <p class="mt-4 hidden">
+                        eBuddy is available on iOS, Android, and web platforms.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="container mx-auto px-4 py-20 bg-white">
+            <h2 class="text-4xl font-bold mb-6">We Value Your Feedback!</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <p class="text-gray-600 mb-4">
+                        Your thoughts help us improve and grow. Share your experience or
+                        suggestions below!
+                    </p>
+                </div>
+                <form>
+                    <div class="space-y-4">
+                        <input type="email" placeholder="Please enter your email.."
+                            class="w-full p-4 border-2 border-black rounded-xl border-2 border-black border-t border-l border-[#000] border-[5px]" />
+                        <textarea placeholder="If you have any query, please type it in here..."
+                            class="w-full h-32 p-4 border-2 border-black rounded-xl border-2 border-black border-t border-l border-[#000] border-[5px]"></textarea>
+                        <button type="submit"
+                            class="bg-custom-yellow px-8 py-3 rounded-full font-bold border-2 border-black transform transition-transform hover:-translate-y-0.5 border-2 border-black border-t border-l border-[#000] border-[4px]">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-custom-yellow py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h2 class="text-xl mb-4 major-mono-display-regular font-bold">Askyla</h2>
+                    <!-- <p class="font-semibold">+1 (7635) 547-12-97</p> -->
+                    <p>info@askyla.com</p>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#start-chat">Start Chat</a></li>
+                        <li><a href="#faq">FAQ's</a></li>
+                        <li><a href="#feedback">Feedback</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4">Subscribe</h3>
+                    <div class="flex">
+                        <input type="email" placeholder="Email address"
+                            class="flex-1 px-4 py-2 rounded-l-lg border-2 border-r-0 border-black" />
+                        <button class="bg-black text-white px-4 py-2 rounded-r-lg border-2 border-black">
+                            →
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-black">
+                <div class="flex justify-between items-center">
+                    <div class="flex gap-4">
+                        <a href="#"
+                            class="w-8 h-8 flex items-center justify-center border-2 border-black rounded-full hover:bg-black hover:text-white transition-colors">in</a>
+                        <a href="#"
+                            class="w-8 h-8 flex items-center justify-center border-2 border-black rounded-full hover:bg-black hover:text-white transition-colors">f</a>
+                        <!-- <a
+                    href="#"
+                    class="w-8 h-8 flex items-center justify-center border-2 border-black rounded-full hover:bg-black hover:text-white transition-colors"
+                    >X</a
+                  > -->
+                    </div>
+                    <p>© 2025, All rights reserved</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white w-full max-w-[400px] rounded-[32px] shadow-lg overflow-hidden relative">
+            <!-- Close button -->
+            <button onclick="hideAuthModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+                title="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div id="authContent" class="p-6">
+                <!-- Auth content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Interface -->
+    <div id="chatInterface" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white w-full max-w-[400px] h-[600px] rounded-[32px] shadow-lg overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center p-4 bg-white/50 border-b border-gray-200">
+                <h2 class="text-xl font-semibold">Chat</h2>
+                <button id="closeChatBtn" class="text-gray-600 hover:text-gray-900 px-3 py-1 rounded-md">
+                    Close
+                </button>
+            </div>
+            <div id="chatArea" class="flex-1 p-4 overflow-y-auto bg-custom-cream">
+                <!-- Chat messages will be dynamically inserted here -->
+            </div>
+            <div class="p-4 bg-white border-t border-gray-200">
+                <div class="flex gap-2 items-center">
+                    <input id="messageInput" type="text" placeholder="Start typing..."
+                        class="flex-1 bg-transparent border-0 focus:ring-0 focus:outline-none" />
+                    <button id="sendMessageBtn" title="Send Message"
+                        class="bg-[#FFB800] hover:bg-[#FFB800]/80 text-black rounded-full w-8 h-8 flex items-center justify-center transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 rotate-45" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Error Modal -->
+    <!-- Error Modal (Tailwind) -->
+    <div id="errorModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg max-w-sm w-full p-6">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-semibold">Error</h3>
+                <button onclick="closeModal()" class="text-gray-500">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div id="errorModalBody" class="mt-4 text-gray-700">
+                <!-- Error message will appear here -->
+            </div>
+            <div class="mt-4">
+                <button onclick="closeModal()" class="bg-blue-500 text-white px-4 py-2 rounded">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+
+</html>

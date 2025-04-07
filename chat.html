@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat with ΔSKYLA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background-color: #faf5eb;
+        font-family: "Open Sans", sans-serif;
+        overflow: hidden;
+      }
+
+      .doodle-bg {
+        position: fixed;
+        inset: 0;
+        background-image: url("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Doodle%20bg-3kV1YUai9Mzt5wAgAfxuhCxP0xjMYb.png");
+        background-size: 800px;
+        opacity: 0.3;
+        pointer-events: none;
+      }
+
+      .chat-container-wrapper {
+        height: calc(100vh - 90px);
+        overflow-y: auto;
+        padding-bottom: 20px;
+        position: relative;
+      }
+
+      .date-badge {
+        background: rgba(0, 0, 0, 0.5);
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+        border-radius: 999px;
+        padding: 4px 12px;
+        color: white;
+        font-size: 13px;
+        margin: 16px auto;
+        width: fit-content;
+        position: sticky;
+        top: 16px;
+        z-index: 10;
+      }
+
+      .message {
+        width: fit-content;
+        padding: 12px 16px;
+        margin: 8px 0;
+        font-size: 15px;
+        line-height: 1.5;
+        animation: messageSlide 0.3s ease-out;
+        border: 1px solid black;
+      }
+
+      .user-message {
+        background: white;
+        border-radius: 16px 16px 4px 16px;
+        margin-left: auto;
+        color: #1a1a1a;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+
+      .ai-message {
+        background: #f7cb46;
+        border-radius: 16px 16px 16px 4px;
+        margin-right: auto;
+        color: #1a1a1a;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+
+      .logout-button {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        background: #f8f4e6;
+        border-radius: 8px;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #1a1a1a;
+        border: 1px solid black;
+        cursor: pointer;
+        transition: all 0.2s;
+        z-index: 20;
+      }
+
+      .logout-button:hover {
+        background: #ffe4b5;
+      }
+
+      .input-wrapper {
+        position: fixed;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 32px);
+        max-width: 768px;
+        background: #f8f4e6;
+        border-radius: 999px;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        z-index: 20;
+        border: 1px solid black;
+      }
+
+      .input-field {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 8px 16px;
+        font-size: 15px;
+        background: transparent;
+        color: #1a1a1a;
+      }
+
+      .input-field::placeholder {
+        color: #666;
+      }
+
+      .send-button {
+        width: 36px;
+        height: 36px;
+        background: #ffb800;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .send-button:hover {
+        background: #ffa600;
+      }
+
+      @keyframes messageSlide {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .typing-indicator {
+        display: inline-block;
+        margin-left: 4px;
+      }
+
+      .typing-indicator span {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background-color: #1a1a1a;
+        border-radius: 50%;
+        margin-right: 3px;
+        animation: typing 1s infinite;
+      }
+
+      .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes typing {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-4px);
+        }
+      }
+    </style>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="./js/login_check.js"></script>
+  </head>
+  <body>
+    <div class="doodle-bg"></div>
+
+    <button onclick="logout()" class="logout-button">
+      <img src="./images/out.png" width="20" height="16" alt="logout" />
+      <span>Logout</span>
+
+    </button>   
+
+    <div class="chat-container-wrapper">
+      <div class="max-w-3xl mt-20 mx-auto px-4" id="chatContainer">
+        <!-- <div class="date-badge" id="dateBadge"></div> -->
+      </div>
+    </div>
+
+    <script>
+      // JavaScript to dynamically display the current date
+      //const dateBadge = document.getElementById("dateBadge");
+      //const currentDate = new Date();
+      //const formattedDate = currentDate.toLocaleDateString("en-US", {
+      //  year: "numeric",
+      //  month: "long",
+      //  day: "numeric",
+      //});
+      //dateBadge.textContent = formattedDate; // Set the current date in the badge
+    </script>
+
+    <div class="input-wrapper">
+      <input
+        type="text"
+        placeholder="Start typing..."
+        class="input-field"
+        id="messageInput"
+      />
+      <button class="send-button" id="sendButton" title="Send">
+        <img src="./images/send.png" width="16" height="16" alt="send" />
+      </button>
+    </div>
+
+    <script src="./js/chat.js"></script>
+  </body>
+</html>
