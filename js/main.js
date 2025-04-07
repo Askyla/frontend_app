@@ -1,7 +1,7 @@
 // This function sends the token to the protected endpoint and handles the response
 function callProtectedEndpoint(token) {
   $.ajax({
-    url: "http://48.217.65.29/api/users/protected-check", // Replace with your FastAPI URL
+    url: "https://server.askyla.com/api/users/protected-check", // Replace with your FastAPI URL
     method: "POST",
     headers: {
       Authorization: "Bearer " + token, // Send the JWT token in the Authorization header
@@ -350,7 +350,7 @@ function handleForgotPassword() {
 
   // Send the email data via AJAX for password reset
   $.ajax({
-    url: "http://48.217.65.29/api/users/forgot-password",
+    url: "https://server.askyla.com/api/users/forgot-password",
     method: "POST",
     data: $.param({
       email: email,
@@ -402,7 +402,7 @@ function handleLogin() {
 
   // Send login data via AJAX
   $.ajax({
-    url: "http://48.217.65.29/api/users/login",
+    url: "https://server.askyla.com/api/users/login",
     method: "POST",
     data: $.param({
       email: email,
@@ -454,7 +454,7 @@ function handleSignup() {
     return;
   }
   $.ajax({
-    url: "http://48.217.65.29/api/users/register", 
+    url: "https://server.askyla.com/api/users/register", 
     method: "POST",
     data: $.param({
       username: username,
@@ -514,7 +514,7 @@ function handleEmailVerification() {
 
   // Submit data using AJAX
   $.ajax({
-    url: "http://48.217.65.29/api/users/verify-email",
+    url: "https://server.askyla.com/api/users/verify-email",
     method: "POST",
     data: $.param({
       email: email,
@@ -564,7 +564,7 @@ function handleResendVerification() {
 
   // Submit data using AJAX to resend the verification code
   $.ajax({
-    url: "http://48.217.65.29/api/users/resend-verification", // Your backend endpoint to resend the OTP
+    url: "https://server.askyla.com/api/users/resend-verification", // Your backend endpoint to resend the OTP
     method: "POST",
     data: $.param({
       email: email,
@@ -620,7 +620,7 @@ function handleOtpVerification() {
   }
 
   $.ajax({
-    url: "http://48.217.65.29/api/users/reset-password",
+    url: "https://server.askyla.com/api/users/reset-password",
     method: "POST",
     data: $.param({
       email: email,

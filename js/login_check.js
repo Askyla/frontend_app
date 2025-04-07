@@ -1,6 +1,6 @@
 function callProtectedEndpoint(token) {
   $.ajax({
-    url: "http://48.217.65.29/api/users/protected-check", // Replace with your FastAPI URL
+    url: "https://server.askyla.com/api/users/protected-check", // Replace with your FastAPI URL
     method: "POST",
     headers: {
       Authorization: "Bearer " + token, // Send the JWT token in the Authorization header

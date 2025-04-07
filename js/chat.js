@@ -13,7 +13,7 @@ $(document).ready(function () {
       if (agentId !== null) {
         clearInterval(checkAgentId);
         console.log("Agent ID is now set:", agentId);
-        let url = `http://48.217.65.29/api/chat/messages?agent_id=${agentId}&limit=1000&msg_object=true`;
+        let url = `https://server.askyla.com/api/chat/messages?agent_id=${agentId}&limit=1000&msg_object=true`;
         console.log(url);   
         $.ajax({
           
@@ -187,7 +187,7 @@ function sendMessage() {
   const typingIndicator = showTypingIndicator();
 
   const agentId = localStorage.getItem("agent_id");
-  const url = `http://48.217.65.29/api/chat/send_messages/${agentId}`;
+  const url = `https://server.askyla.com/api/chat/send_messages/${agentId}`;
 
   // Prepare the data payload
   const data = JSON.stringify({
