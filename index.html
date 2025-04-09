@@ -16,6 +16,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
         rel="stylesheet" />
+        
+    <script>
+        let recaptcha1, recaptcha2;
+        
+        var onloadCallback = function () {
+            recaptcha1 = grecaptcha.render('recaptcha1', {
+            'sitekey': '6Leh5hArAAAAAD2Q8dcwvbJCxVfkZi_RKppk4whh'
+            });
+            recaptcha2 = grecaptcha.render('recaptcha2', {
+            'sitekey': '6Leh5hArAAAAAD2Q8dcwvbJCxVfkZi_RKppk4whh'
+            });
+        };
+    </script>
+
     <style>
         body {
             font-family: "Nunito", sans-serif;
@@ -603,6 +617,8 @@
                             class="w-full p-4 border-2 border-black rounded-xl border-2 border-black border-t border-l border-[#000] border-[5px]" />
                         <textarea placeholder="If you have any query, please type it in here..."
                             class="w-full h-32 p-4 border-2 border-black rounded-xl border-2 border-black border-t border-l border-[#000] border-[5px]"></textarea>
+                        
+                        <div id="recaptcha1"></div>
                         <button type="submit"
                             class="bg-custom-yellow px-8 py-3 rounded-full font-bold border-2 border-black transform transition-transform hover:-translate-y-0.5 border-2 border-black border-t border-l border-[#000] border-[4px]">
                             Submit
@@ -632,13 +648,14 @@
                 </div>
                 <div>
                     <h3 class="font-bold mb-4">Subscribe</h3>
-                    <div class="flex">
+                    <div class="flex mb-4">
                         <input type="email" placeholder="Email address"
                             class="flex-1 px-4 py-2 rounded-l-lg border-2 border-r-0 border-black" />
-                        <button class="bg-black text-white px-4 py-2 rounded-r-lg border-2 border-black">
+                        <button id="subscribeBtn" class="bg-black text-white px-4 py-2 rounded-r-lg border-2 border-black">
                             →
                         </button>
                     </div>
+                    <div id="recaptcha2"></div>
                 </div>
             </div>
             <div class="mt-12 pt-8 border-t border-black">
@@ -727,8 +744,12 @@
         </div>
     </div>
 
+    
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./js/main.js"></script>
+    <script src="./js/newsletter.js"></script>
 </body>
 
 </html>
