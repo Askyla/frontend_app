@@ -1,7 +1,9 @@
 document.getElementById("subscribeBtn").addEventListener("click", function () {
     const emailInput = document.querySelector('#newsletter_email');
     const email = emailInput.value.trim();
+    console.log(email);
     const recaptchaResponse = grecaptcha.getResponse(recaptcha2); // use recaptcha2 here
+    console.log(recaptchaResponse);
 
     if (!email || !recaptchaResponse) {
         alert("Please enter a valid email and complete the captcha.");
