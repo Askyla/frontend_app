@@ -14,7 +14,7 @@ document.getElementById("subscribeBtn").addEventListener("click", function () {
 
     const data = JSON.stringify({
         email: email,
-        recaptcha: recaptchaResponse,
+        captcha_response: recaptchaResponse,
     });
 
     $.ajax({
