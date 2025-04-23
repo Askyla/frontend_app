@@ -6,7 +6,7 @@ document.getElementById("subscribeBtn").addEventListener("click", function () {
     console.log(recaptchaResponse);
 
     if (!email || !recaptchaResponse) {
-        alert("Please enter a valid email and complete the captcha.");
+        alert("Please enter a valid email and complete the captcha." + email);
         return;
     }
 
