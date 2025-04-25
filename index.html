@@ -613,13 +613,13 @@
                 </div>
                 <form>
                     <div class="space-y-4">
-                        <input type="email" placeholder="Please enter your email.."
+                        <input type="email" id="contactEmail" placeholder="Please enter your email.."
                             class="w-full p-4 border-2 border-black rounded-xl border-2 border-black border-t border-l border-[#000] border-[5px]" />
-                        <textarea placeholder="If you have any query, please type it in here..."
+                        <textarea placeholder="If you have any query, please type it in here..."  id="contactTextarea"
                             class="w-full h-32 p-4 border-2 border-black rounded-xl border-2 border-black border-t border-l border-[#000] border-[5px]"></textarea>
                         
                         <div id="recaptcha1"></div>
-                        <button
+                        <button  id="contactButton"
                             class="bg-custom-yellow px-8 py-3 rounded-full font-bold border-2 border-black transform transition-transform hover:-translate-y-0.5 border-2 border-black border-t border-l border-[#000] border-[4px]">
                             Submit
                         </button>
@@ -751,45 +751,88 @@
     <script src="./js/main.js"></script>
     <script>
         document.getElementById("subscribeBtn").addEventListener("click", function () {
-        const emailInput = document.querySelector('#newsletter_email');
-        const email = emailInput.value.trim();
-        console.log(email);
-        const recaptchaResponse = grecaptcha.getResponse(recaptcha2); // use recaptcha2 here
-        console.log(recaptchaResponse);
+            const emailInput = document.querySelector('#newsletter_email');
+            const email = emailInput.value.trim();
+            const recaptchaResponse = grecaptcha.getResponse(recaptcha2);
 
-        if (!email || !recaptchaResponse) {
-            alert("Please enter a valid email and complete the captcha." + email);
-            return;
-        }
-
-        const url = "https://server.askyla.com/api/form/newsletter";
-
-        const data = JSON.stringify({
-            email: email,
-            captcha_response: recaptchaResponse,
-        });
-
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: data,
-            contentType: "application/json",
-            processData: false,
-            beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer your_token");
-            },
-            success: function (response) {
-            console.log("Subscribed successfully", response);
-            alert("Subscription successful!");
-            emailInput.value = "";
-            grecaptcha.reset(recaptcha2); // reset only recaptcha2
-            },
-            error: function (xhr, status, error) {
-            console.error("Subscription failed:", status, error);
-            alert("Subscription failed: " + error);
+            if (!email || !recaptchaResponse) {
+                alert("Please enter a valid email and complete the captcha." + email);
+                return;
             }
+
+            const url = "https://server.askyla.com/api/form/newsletter";
+
+            const data = JSON.stringify({
+                email: email,
+                captcha_response: recaptchaResponse,
+            });
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                contentType: "application/json",
+                processData: false,
+                beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer your_token");
+                },
+                success: function (response) {
+                console.log("Subscribed successfully", response);
+                alert("Subscription successful!");
+                emailInput.value = "";
+                grecaptcha.reset(recaptcha2); // reset only recaptcha2
+                },
+                error: function (xhr, status, error) {
+                console.error("Subscription failed:", status, error);
+                alert("Subscription failed: " + error);
+                }
+            });
         });
-    });
+
+
+        document.getElementById("contactButton").addEventListener("click", function () {
+            const emailInput = document.querySelector('#contactEmail');
+            const email = emailInput.value.trim();
+            const textareaInput = document.querySelector('#contactTextarea');
+            const message = textareaInput.value.trim();
+
+            const recaptchaResponse = grecaptcha.getResponse(recaptcha1);
+
+            if (!email || !recaptchaResponse || !message) {
+                alert("Please enter a valid email, complete the captcha or write feedback." + email);
+                return;
+            }
+
+            const url = "https://server.askyla.com/api/form/contact";
+
+            const data = JSON.stringify({
+                email: email,
+                message: message,
+                captcha_response: recaptchaResponse,
+            });
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                contentType: "application/json",
+                processData: false,
+                beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer your_token");
+                },
+                success: function (response) {
+                console.log("Feedback Submitted!", response);
+                alert("Feedback Submitted!");
+                emailInput.value = "";
+                textareaInput.value = "";
+                grecaptcha.reset(recaptcha1); // reset only recaptcha2
+                },
+                error: function (xhr, status, error) {
+                console.error("Failed to record feedback:", status, error);
+                alert("Failed to record feedback: " + error);
+                }
+            });
+        });
 
     </script>
 </body>
