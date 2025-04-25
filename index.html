@@ -748,7 +748,7 @@
     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- <script src="./js/main.js"></script> -->
+    <script src="./js/main.js"></script>
     <script>
         document.getElementById("subscribeBtn").addEventListener("click", function () {
             const emailInput = document.querySelector('#newsletter_email');
@@ -791,6 +791,7 @@
 
 
         document.getElementById("contactButton").addEventListener("click", function () {
+            event.preventDefault();
             const emailInput = document.querySelector('#contactEmail');
             const email = emailInput.value.trim();
             const textareaInput = document.querySelector('#contactTextarea');
@@ -810,7 +811,7 @@
                 message: message,
                 captcha_response: recaptchaResponse,
             });
-
+            alert(123);
             $.ajax({
                 url: url,
                 type: "POST",
@@ -821,15 +822,15 @@
                 xhr.setRequestHeader("Authorization", "Bearer your_token");
                 },
                 success: function (response) {
-                console.log("Feedback Submitted!", response);
-                alert("Feedback Submitted!");
-                emailInput.value = "";
-                textareaInput.value = "";
-                grecaptcha.reset(recaptcha1); // reset only recaptcha2
+                    console.log("Feedback Submitted!", response);
+                    alert("Feedback Submitted!");
+                    emailInput.value = "";
+                    textareaInput.value = "";
+                    grecaptcha.reset(recaptcha1); // reset only recaptcha2
                 },
                 error: function (xhr, status, error) {
-                console.error("Failed to record feedback:", status, error);
-                alert("Failed to record feedback: " + error);
+                    console.error("Failed to record feedback:", status, error);
+                    alert("Failed to record feedback: " + error);
                 }
             });
         });
